@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="module" src="./acss.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
+<div class="D(n)!" style="position: fixed;width: 100%;height: 100%;background-color: #ffffff;z-index: 999;text-align: center;display: flex;justify-content: center;align-items: center;"><img style="animation: loadingio 1s infinite;"src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAANlBMVEX///+ForbC0duNqLvh6O2jucj3+fqUrr/o7fHS3OSctMTw8/ayxdG6ytazxdHJ19/Z4uirv83FAaZLAAABu0lEQVR42u3aW3KkMAyFYR1fsfu+/81OVwaaDsnLMJUq5PzfClCZIxsZAwAAAAAAAAAAAAAAAAAAAAAAAAD8jNJCyLlL+WZ+TaFrFcynEqo+M5dC1NbJ/GlVGqCQ0xwN769WinrxHPamrzy236s+iedbSv7SsamjXpI59V5HdJeKVXsvo5hbSS91Mr+mqEV3vBxmXYuzedYGqaNUzbq5FjSrrvNhJWrmuV89BbeHw40lIdH3i2XTKAsSlqSbc8tmeDHfTpq5PbdvdvVozoUhDidPYZCeZXlvRO45Kh8oWHsLuR+tRdSd08SsD9mOYu808XDNLu58oMONUx/68LB/Mx3uUyztC23S0TJi0znnx2T+C/nl++h5lEKi/mrmW9LM+eexXQ7Xff/zYOPuNmsjDDIJK3GQgcUoI71JY4z0ShxkQbrGSMhVGmFXL1cNcStUuhbR418R77e/A+yFJUgjBCREPXmf3adLleT6GntKKVyjJM/r0bJePOej6TvRX7+q+kZ3uH/oq+rutVoLGeDXurpZDbe/1jWt+s1fxlf3LPWcQ2he1wIAAAAAAAAAAAAAAAAAAAAAAAAADu8PWf0ITaRXSWUAAAAASUVORK5CYII="></div>  
+</head>
+
+  <body>
+    
+<style type="text/css">
+@keyframes loadingio {
+  0% { transform: rotate(0) }
+  100% { transform: rotate(360deg) }
+}
+</style>
+
+    <div class="Bgc(#0280ae.5) C(#fff) P(20px)">
+      <h1>Atomizer Web by Rust</h1>
+  </div>
+  <div class="Bdb(2px) Bdbc(#0280ae) Bdbs(s) Ov(a)">
+    <div class="IbBox() W(1/2) Fl(left)">
+      <h2>HTML</h2>
+      <textarea id='editor-html'></textarea>
+    </div>
+    <div class="IbBox() W(1/2) Fl(right)">
+      <h2>Css</h2>
+      <textarea id='editor-css'></textarea>
+    </div>
+</div>
+<div id="result">
+ 
+</div>
+  <script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('editor-html'), {
+    mode: "html",
+    
+    lineNumbers: true,
+});
+editor.save();
+var editor_css = CodeMirror.fromTextArea(document.getElementById('editor-css'), {
+    mode: "css",
+    lineNumbers: true,
+});
+editor_css.save();
+
+editor.on('change',function(cMirror){
+  document.getElementById("result").innerHTML = cMirror.getValue(); 
+  let compiledcss = atomic_css_compile_from_html(cMirror.getValue());
+  add_css_to_body(compiledcss);
+  editor_css.setValue(compiledcss.replaceAll("}", "}\n"));
+});
+document.addEventListener("DOMContentLoaded", function () {
+setTimeout(function(){
+  editor.setValue("<div class=\"D(b) Va(t) Fz(20px)\">Hello World!</div>");
+},500); });
+function add_css_to_body(css) {
+    var head = document.head || document.getElementsByTagName("head")[0],
+      style = document.createElement("style");
+    head.appendChild(style);
+    style.type = "text/css";
+    if (style.styleSheet) {
+      // This is required for IE8 and below.
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+  }
+  </script>
+  </body>
+</html>
